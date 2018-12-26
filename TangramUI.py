@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from interactiveview import InteractiveView
 
 class Ui_tangramForm(object):
     def setupUi(self, tangramForm):
@@ -14,7 +15,7 @@ class Ui_tangramForm(object):
         tangramForm.resize(1200, 610)
         tangramForm.setMaximumSize(QtCore.QSize(1200, 610))
         self.groupBox = QtWidgets.QGroupBox(tangramForm)
-        self.groupBox.setGeometry(QtCore.QRect(10, 10, 91, 91))
+        self.groupBox.setGeometry(QtCore.QRect(10, 3, 91, 91))
         self.groupBox.setContextMenuPolicy(QtCore.Qt.DefaultContextMenu)
         self.groupBox.setAutoFillBackground(False)
         self.groupBox.setTitle("")
@@ -41,13 +42,14 @@ class Ui_tangramForm(object):
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
-        self.imgLable = QtWidgets.QLabel(tangramForm)
-        self.imgLable.setGeometry(QtCore.QRect(302, 2, 900, 600))
-        self.imgLable.setObjectName("imgLable")
         self.imgcboBox = QtWidgets.QComboBox(tangramForm)
         self.imgcboBox.setGeometry(QtCore.QRect(120, 10, 161, 26))
         self.imgcboBox.setEditable(True)
         self.imgcboBox.setObjectName("imgcboBox")
+        self.graphicsView = QtWidgets.QGraphicsView(tangramForm)
+        # self.graphicsView = InteractiveView(tangramForm)
+        self.graphicsView.setGeometry(QtCore.QRect(300, 0, 900, 600))
+        self.graphicsView.setObjectName("graphicsView")
 
         self.retranslateUi(tangramForm)
         QtCore.QMetaObject.connectSlotsByName(tangramForm)
@@ -57,6 +59,5 @@ class Ui_tangramForm(object):
         tangramForm.setWindowTitle(_translate("tangramForm", "Tangram UI"))
         self.sourceImageRBtn.setText(_translate("tangramForm", "图形实例"))
         self.personalDesignRBtn.setText(_translate("tangramForm", "个人设计"))
-        self.imgLable.setText(_translate("tangramForm", "TextLabel"))
 
 import apprcc_rc
