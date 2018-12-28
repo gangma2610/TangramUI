@@ -13,8 +13,7 @@ from TangramUI import Ui_tangramForm
 from PyQt5.QtCore import *
 
 from data import tangram_info, img_name_list
-from interactiveview import InteractiveView
-from customItem import CustomItem
+
 ###################################################################################
 
 class MyMainWidget(QWidget, Ui_tangramForm):
