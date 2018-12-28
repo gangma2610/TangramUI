@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/12/19 14:58
 # @Author  : Lynn
-# @Site    : 
+# @Site    :
 # @File    : callTangramUI.py
 # @Software: PyCharm
 import sys
@@ -12,8 +12,9 @@ from PyQt5.QtGui import *
 from TangramUI import Ui_tangramForm
 from PyQt5.QtCore import *
 
-from data import tangram_info
+from data import tangram_info, img_name_list
 from interactiveview import InteractiveView
+from customItem import CustomItem
 ###################################################################################
 
 class MyMainWidget(QWidget, Ui_tangramForm):
@@ -23,32 +24,46 @@ class MyMainWidget(QWidget, Ui_tangramForm):
 
         # 下拉列表添加图片信息
         self.imgcboBox.addItems(
-            [
-                '1.jpg', '4.jpg', '5.jpg', 'b1.jpg', 'b2.jpg',  'cat01.jpg',
-                'animal01.jpg', 'people01.jpg', 'people02.jpg'
-             ]
+            img_name_list
         )
         self.imgcboBox.currentIndexChanged.connect(self.selectionchange) # 下拉列表添加事件处理
         # Radio Button 添加事件处理
         self.sourceImageRBtn.toggled.connect(lambda : self.btnstate(self.sourceImageRBtn))
         self.personalDesignRBtn.toggled.connect(lambda : self.btnstate(self.personalDesignRBtn))
+        # push button 添加事件处理
+        self.saveBtn.clicked.connect(self.btnSave_Clicked)
         # 默认显示 图像实例中的选中图像
         self._imgPix = QPixmap('./mould/' + self.imgcboBox.currentText())
         self._pixmap_item = QGraphicsPixmapItem(self._imgPix)
+        self.graphicsView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.graphicsView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scene = QGraphicsScene()
         self.scene.addItem(self._pixmap_item)
+        self.scene.setSceneRect(0, 0, 900, 600)
+        # 添加场景
         self.graphicsView.setScene(self.scene)
 
-        self.tangram_items = [ [] for i in range(7) ]
 
 
+    def btnSave_Clicked(self):
+        '''
+        单击保存按钮，保存场景中的图片。
+        '''
+        self.scene.clearSelection()
+        self._imgPix = QPixmap(900, 600)
+        self._imgPix.fill(Qt.white)
+
+        painter = QPainter(self._imgPix)
+        painter.setRenderHint(QPainter.Antialiasing)
+        self.scene.render(painter)
+        print('Saving image： res/e_image.jpg ...')
+        self._imgPix.save('res/e_image.jpg')
+        print('Saved.')
 
 
     def btnstate(self, btn):
         '''
         RadioButton发生变化时出发事件处理函数。
-        :param btn:
-        :return:
         '''
         if (btn.objectName() == self.sourceImageRBtn.objectName() and btn.isChecked() == True) \
             or (btn.objectName() == self.personalDesignRBtn.objectName() and btn.isChecked() == False):
@@ -61,117 +76,65 @@ class MyMainWidget(QWidget, Ui_tangramForm):
             # 添加新图片
             self.scene.addItem(self._pixmap_item)
             self.graphicsView.setScene(self.scene)
-            # self.imgLable.setPixmap(self._imgPix)
-            # self.imgcboBox.setVisible(True)
+
         else:
             # 切换到个人设计模块时，进行初始化
             self.imgcboBox.setEnabled(False)
             self.scene.clear()
 
-            # self._pixmap_item = QGraphicsRectItem(50, 50, 100, 100)
-            polygon = QPolygonF()
-            for item in [QPoint(200, 0), QPoint(200, 100), QPoint(150, 150), QPoint(150, 50)]:
-                polygon.append(item)
-            self._pixmap_item = QGraphicsPolygonItem(polygon)
+            for item in tangram_info: # 绘画每个七巧板
+                polygon=QPolygonF()
+                for p in item['pos']:
+                    polygon.append(p)
 
-            self.scene.addItem(self._pixmap_item)
-            # self.scene.addRect(QRect(10, 10, 100, 100))
-            # self.scene.addItem()
+                pen = QPen()
+                pen.setColor(QColor(item['color']))
+                brush = QBrush(Qt.SolidPattern)
+                brush.setColor(QColor(item['color']))
+                self.scene.addPolygon(polygon, pen=pen, brush=brush)
+                all_items = self.scene.items()
+                for item in all_items:
+                    item.setFlags(QGraphicsItem.ItemIsSelectable | QGraphicsItem.ItemIsMovable | QGraphicsItem.ItemIsFocusable)
+
             self.graphicsView.setScene(self.scene)
 
 
-            # self.imgLable.clear()
-            # self.initImageLable()
-
-
-
-    def initImageLable(self):
+    def keyPressEvent(self, event):
         '''
-        初始化图像展示区域。
-        :return:
+         上/下/左/右键各个方向移动，空格/回车键旋转
         '''
-        # 设置大小为 900 * 600
-        self._imgPix = QPixmap()
-        self._imgPix = QPixmap(900, 600)
-        self._imgPix.fill(Qt.white)
-        self.imgLable.setPixmap(self._imgPix)
-
-        self.lastPoint = QPoint()
-        self.endPoint = QPoint()
-
-
-    def paintEvent(self, event):
-        '''
-        绘画事件。
-        :param event:
-        :return:
-        '''
-        if self.personalDesignRBtn.isChecked() == False:
+        # itm = self.scene.focusItem()
+        itms = self.scene.selectedItems()
+        if len(itms) != 1:
             return;
-        self.draw_tangrams()
+
+        itm = itms[0]
+
+        if event.key() == Qt.Key_W:  # 上移
+            itm.setPos(itm.x(), itm.y() - 1)
+
+        elif event.key() == Qt.Key_S:  # 下移
+            itm.setPos(itm.x(), itm.y() + 1)
 
 
-    def draw_tangrams(self):
+        elif event.key() == Qt.Key_A:  # 左移
+            itm.setPos(itm.x() - 1, itm.y())
 
-        for i in [0, 1, 2, 3, 4, 5, 6]:
-            item = tangram_info[i]
-            self.drawing(item)
+        elif event.key() == Qt.Key_D:  # 右移
+            itm.setPos(itm.x() + 1, itm.y())
 
-        # self.imgLable.setPixmap(self._imgPix)
+        elif event.key() == Qt.Key_E:  # 逆时针旋转
+            pt = itm.boundingRect().center()
+            itm.setTransformOriginPoint(pt.x(), pt.y())
+            itm.setRotation(itm.rotation() - 5)
 
+        elif event.key() == Qt.Key_R:  # 顺时针旋转
+            pt = itm.boundingRect().center()
+            itm.setTransformOriginPoint(pt.x(), pt.y())
+            itm.setRotation(itm.rotation() + 5)
 
-    def drawing(self, item):
-        pp = QPainter(self._imgPix)
-        brush = QBrush(Qt.SolidPattern)
-        brush.setColor(QColor(item['color']))
-        pp.setBrush(brush)
-        pp.setPen(QColor(item['color']))
-        if item['shape'] == 'triangle':
-            pp.drawPolygon(item['pos'][0], item['pos'][1], item['pos'][2])
-        elif item['shape'] == 'square':
-            pp.drawPolygon(item['pos'][0], item['pos'][1], item['pos'][2], item['pos'][3])
         else:
-            pp.drawPolygon(item['pos'][0], item['pos'][1], item['pos'][2], item['pos'][3])
-
-
-    def draw_rect_by_mouse(self):
-        if self.personalDesignRBtn.isChecked() == False:
-            return;
-
-        # painter = QPainter(self)
-        x = self.lastPoint.x() - self.imgLable.x()
-        y = self.lastPoint.y() - self.imgLable.y()
-        w = self.endPoint.x() - self.imgLable.x() - x
-        h = self.endPoint.y() - self.imgLable.y() - y
-
-        pp = QPainter(self._imgPix)
-        brush = QBrush(Qt.SolidPattern)
-        brush.setColor(QColor('#f6ca29'))
-        pp.setBrush(brush)
-        pp.setPen(QColor('#f6ca29'))
-        pp.drawRect(x, y, w, h)
-        # self.imgLable.setPixmap(self._imgPix)
-
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.lastPoint = event.pos()
-            self.endPoint = self.lastPoint
-
-
-
-    def mouseMoveEvent(self, event):
-        if event.buttons() and Qt.LeftButton:
-            self.endPoint = event.pos()
-            self.update()
-
-
-    def mouseReleseEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.endPoint = event.pos()
-            # 进行重新绘制
-            self.update()
-            # self._isDrawing = False
+            pass
 
 
     def selectionchange(self,i):

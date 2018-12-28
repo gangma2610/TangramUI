@@ -7,7 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from interactiveview import InteractiveView
 
 class Ui_tangramForm(object):
     def setupUi(self, tangramForm):
@@ -38,7 +37,7 @@ class Ui_tangramForm(object):
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
         self.line_3 = QtWidgets.QFrame(tangramForm)
-        self.line_3.setGeometry(QtCore.QRect(290, 0, 16, 611))
+        self.line_3.setGeometry(QtCore.QRect(290, 0, 16, 601))
         self.line_3.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_3.setObjectName("line_3")
@@ -47,9 +46,12 @@ class Ui_tangramForm(object):
         self.imgcboBox.setEditable(True)
         self.imgcboBox.setObjectName("imgcboBox")
         self.graphicsView = QtWidgets.QGraphicsView(tangramForm)
-        # self.graphicsView = InteractiveView(tangramForm)
-        self.graphicsView.setGeometry(QtCore.QRect(300, 0, 900, 600))
+        self.graphicsView.setGeometry(QtCore.QRect(300, 1, 900, 600))
+        self.graphicsView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.graphicsView.setObjectName("graphicsView")
+        self.saveBtn = QtWidgets.QPushButton(tangramForm)
+        self.saveBtn.setGeometry(QtCore.QRect(190, 50, 90, 41))
+        self.saveBtn.setObjectName("saveBtn")
 
         self.retranslateUi(tangramForm)
         QtCore.QMetaObject.connectSlotsByName(tangramForm)
@@ -59,5 +61,6 @@ class Ui_tangramForm(object):
         tangramForm.setWindowTitle(_translate("tangramForm", "Tangram UI"))
         self.sourceImageRBtn.setText(_translate("tangramForm", "图形实例"))
         self.personalDesignRBtn.setText(_translate("tangramForm", "个人设计"))
+        self.saveBtn.setText(_translate("tangramForm", "保 存"))
 
 import apprcc_rc
