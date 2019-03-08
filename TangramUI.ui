@@ -135,14 +135,27 @@
   <widget class="QPushButton" name="saveBtn">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>50</y>
-     <width>90</width>
+     <x>117</x>
+     <y>56</y>
+     <width>81</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>保 存</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="runBtn">
+   <property name="geometry">
+    <rect>
+     <x>204</x>
+     <y>56</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string> 运行</string>
    </property>
   </widget>
  </widget>

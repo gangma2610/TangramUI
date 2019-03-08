@@ -50,8 +50,11 @@ class Ui_tangramForm(object):
         self.graphicsView.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.graphicsView.setObjectName("graphicsView")
         self.saveBtn = QtWidgets.QPushButton(tangramForm)
-        self.saveBtn.setGeometry(QtCore.QRect(190, 50, 90, 41))
+        self.saveBtn.setGeometry(QtCore.QRect(117, 56, 81, 41))
         self.saveBtn.setObjectName("saveBtn")
+        self.runBtn = QtWidgets.QPushButton(tangramForm)
+        self.runBtn.setGeometry(QtCore.QRect(204, 56, 81, 41))
+        self.runBtn.setObjectName("runBtn")
 
         self.retranslateUi(tangramForm)
         QtCore.QMetaObject.connectSlotsByName(tangramForm)
@@ -62,5 +65,6 @@ class Ui_tangramForm(object):
         self.sourceImageRBtn.setText(_translate("tangramForm", "图形实例"))
         self.personalDesignRBtn.setText(_translate("tangramForm", "个人设计"))
         self.saveBtn.setText(_translate("tangramForm", "保 存"))
+        self.runBtn.setText(_translate("tangramForm", " 运行"))
 
 import apprcc_rc

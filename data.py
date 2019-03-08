@@ -14,7 +14,7 @@ from PyQt5.QtCore import  Qt, QPoint, QPointF
 tangram_info = [
     {
         'pos' : [QPoint(0, 0), QPoint(296, 0), QPoint(148, 148)], # 绿色
-        'color' : '#3fa539',
+        'color' : '#fe9535',
         'click' : False,
         'drag' : False,
         'types' : 3,
@@ -22,7 +22,7 @@ tangram_info = [
     },
     {
         'pos' : [QPoint(0, 0), QPoint(148, 148), QPoint(0, 296)], # 橙色
-        'color' : '#fe9535',
+        'color' : '#3fa539',
         'click' : False,
         'drag' : False,
         'types' : 3,
@@ -39,7 +39,7 @@ tangram_info = [
     },
     {
         'pos' : [QPoint(222, 74), QPoint(222, 222), QPoint(148, 148)], # 粉色
-        'color' : '#ff87c4',
+        'color' : '#c31ca7',
         'click' : False,
         'drag' : False,
         'types' : 3,
@@ -55,7 +55,7 @@ tangram_info = [
     },
     {
         'pos' : [QPoint(74, 222), QPoint(148, 296), QPoint(0, 296)], # 紫色
-        'color' : '#c31ca7',
+        'color' : '#ff87c4',
         'click' : False,
         'drag' : False,
         'types' : 3,

@@ -31,6 +31,7 @@ class MyMainWidget(QWidget, Ui_tangramForm):
         self.personalDesignRBtn.toggled.connect(lambda : self.btnstate(self.personalDesignRBtn))
         # push button 添加事件处理
         self.saveBtn.clicked.connect(self.btnSave_Clicked)
+        self.runBtn.clicked.connect(self.btnRun_Clicked)
         # 默认显示 图像实例中的选中图像
         self._imgPix = QPixmap('./mould/' + self.imgcboBox.currentText())
         self._pixmap_item = QGraphicsPixmapItem(self._imgPix)
@@ -41,6 +42,9 @@ class MyMainWidget(QWidget, Ui_tangramForm):
         self.scene.setSceneRect(0, 0, 900, 600)
         # 添加场景
         self.graphicsView.setScene(self.scene)
+
+        self._is_running = False
+        self._is_saved = False
 
 
 
@@ -58,6 +62,22 @@ class MyMainWidget(QWidget, Ui_tangramForm):
         print('Saving image： res/e_image.jpg ...')
         self._imgPix.save('res/e_image.jpg')
         print('Saved.')
+
+        if self._is_saved == False:
+            self._is_saved = True
+
+
+
+    def btnRun_Clicked(self):
+        if self._is_saved == False:
+            return;
+
+        if self._is_running == False:
+            self._is_running = True
+            print('Running...')
+            # 七巧板工程部分代码
+            # self._is_running = False
+
 
 
     def btnstate(self, btn):
@@ -139,18 +159,17 @@ class MyMainWidget(QWidget, Ui_tangramForm):
     def selectionchange(self,i):
         '''
         下拉列表中的选项改变后触发事件处理函数。
-        :param i:
-        :return:
         '''
         self._imgPix = QPixmap('./mould/' + self.imgcboBox.currentText())
         self._pixmap_item = QGraphicsPixmapItem(self._imgPix)
         self.scene.addItem(self._pixmap_item)
         self.graphicsView.setScene(self.scene)
-        # self.imgLable.sepp.drawPolygon(item['pos'][0], item['pos'][1], item['pos'][2], item['pos'][3])tPixmap(self._imgPix)
+
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     myWidget = MyMainWidget()
+
     myWidget.show()
     sys.exit(app.exec_())
